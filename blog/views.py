@@ -90,9 +90,8 @@ class PolicyView(mixins.RetrieveModelMixin,
     def get(self, request, *args, **kwargs):
         #policy = PrivacyPolicyHistory.objects.latest('id')
         #serializers = self.get_serializer(policy)
-        #return self.retrieve(request, *args, **kwargs)
-        return Response(serializers.data)
-        #return HttpResponse("policy")
+        return self.retrieve(request, *args, **kwargs)
+
 
     def post(self, request):
         return HttpResponse("policy")
