@@ -1,0 +1,5 @@
+MODULE_NAME = 'study'
+STATUS = 'status'
+MESSAGE = 'message'
+RESULT = 'result'
+MODULE = 'module'

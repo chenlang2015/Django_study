@@ -14,6 +14,7 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from blog.models import Subject, Teacher, PrivacyPolicyHistory
 from rest_framework.views import APIView, Response
 from blog.models import Subject
+from common.utils.generic import response_success
 from .serializers import BookModelSerializer, TeacherSerializer, BookmodelPartSerializer, PolicySerializer
 
 
@@ -99,7 +100,7 @@ class PolicyView(mixins.RetrieveModelMixin,
         policy_ser = self.get_serializer(data=data)
         policy_ser.is_valid(raise_exception=True)
         policy_ser.save()
-        return HttpResponse(policy_ser.data)
+        return response_success(policy_ser.data)
 
     ##在serializer中定义了update方法，直接用put方法更新数据
     def put(self, request, *args, **kwargs):
@@ -111,5 +112,20 @@ class PolicyView(mixins.RetrieveModelMixin,
             if policy_ser.is_valid(raise_exception=True):
                 policy_ser.save()
                 print("the policy_ser is %s" % policy_ser)
-                return HttpResponse(policy_ser.data)
-        return HttpResponse("error")
+                return response_success(policy_ser.data)
+        return response_success("error")
+
+class GetAllPolicyView(mixins.RetrieveModelMixin,
+                          mixins.UpdateModelMixin,
+                          generics.GenericAPIView):
+    queryset = PrivacyPolicyHistory.objects.all()
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+    parser_classes = (JSONParser,)
+    serializer_class = PolicySerializer
+    def get(self,request):
+        instance = self.get_queryset()
+        print("the all data is %s",instance)
+        serializer = PolicySerializer(instance=instance, many=True)
+        return response_success(serializer.data)
+
+
