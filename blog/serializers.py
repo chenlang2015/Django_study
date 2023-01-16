@@ -5,6 +5,9 @@ from blog.models import Subject, Teacher, PrivacyPolicyHistory
 
 
 ##  批量插入数据
+from common.utils.exception import ParamsIsNullException
+
+
 class BookModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
@@ -31,7 +34,9 @@ class PolicySerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivacyPolicyHistory
         fields = "__all__"
-
+    def validate(self,validated_data):
+        if validated_data.get("account_id")=="cl":
+            raise ParamsIsNullException("account_id")
     #重新定义
     def create(self, validated_data):
         return PrivacyPolicyHistory.objects.create(**validated_data)
