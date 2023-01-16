@@ -31,3 +31,14 @@ class PolicySerializer(serializers.ModelSerializer):
     class Meta:
         model = PrivacyPolicyHistory
         fields = "__all__"
+
+    #重新定义
+    def create(self, validated_data):
+        return PrivacyPolicyHistory.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.account_id = validated_data.get('account_id', instance.account_id)
+        instance.type= validated_data.get('type', instance.type)
+        instance.version = validated_data.get('version', instance.version)
+        instance.save()
+        return instance

@@ -92,6 +92,24 @@ class PolicyView(mixins.RetrieveModelMixin,
         #serializers = self.get_serializer(policy)
         return self.retrieve(request, *args, **kwargs)
 
-
+    ##直接用post方法插入数据
     def post(self, request):
-        return HttpResponse("policy")
+        data = request.data
+        print("the post data is %s" % data)
+        policy_ser = self.get_serializer(data=data)
+        policy_ser.is_valid(raise_exception=True)
+        policy_ser.save()
+        return HttpResponse(policy_ser.data)
+
+    ##在serializer中定义了update方法，直接用put方法更新数据
+    def put(self, request, *args, **kwargs):
+        request_data = request.data
+        if kwargs.get("id"):
+            policy = self.get_object()
+            policy_ser = self.get_serializer(instance=policy, data=request_data)
+            print("the policy_ser is %s" % policy_ser)
+            if policy_ser.is_valid(raise_exception=True):
+                policy_ser.save()
+                print("the policy_ser is %s" % policy_ser)
+                return HttpResponse(policy_ser.data)
+        return HttpResponse("error")
