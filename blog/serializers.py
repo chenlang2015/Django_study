@@ -35,8 +35,13 @@ class PolicySerializer(serializers.ModelSerializer):
         model = PrivacyPolicyHistory
         fields = "__all__"
     def validate(self,validated_data):
-        if validated_data.get("account_id")=="cl":
+        if (validated_data.get("account_id")) !="cl":
+            print("account_id is int")
             raise ParamsIsNullException("account_id")
+        if  (validated_data.get("type")) != "cl":
+            print("type is int")
+            raise ParamsIsNullException("type")
+        return validated_data
     #重新定义
     def create(self, validated_data):
         return PrivacyPolicyHistory.objects.create(**validated_data)
