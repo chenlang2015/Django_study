@@ -5,7 +5,7 @@ from blog.models import Subject, Teacher, PrivacyPolicyHistory
 
 
 ##  批量插入数据
-from common.utils.exception import ParamsIsNullException
+from common.utils.exceptions import ParamsIsNullException
 
 
 class BookModelSerializer(serializers.ModelSerializer):

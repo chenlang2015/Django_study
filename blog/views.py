@@ -14,7 +14,7 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from blog.models import Subject, Teacher, PrivacyPolicyHistory
 from rest_framework.views import APIView, Response
 from blog.models import Subject
-from common.utils.generic import response_success
+from common.utils.generic import response_success, handle_exception
 from .serializers import BookModelSerializer, TeacherSerializer, BookmodelPartSerializer, PolicySerializer
 
 
@@ -103,6 +103,7 @@ class PolicyView(mixins.RetrieveModelMixin,
         return response_success(policy_ser.data)
 
     ##在serializer中定义了update方法，直接用put方法更新数据
+    @handle_exception
     def put(self, request, *args, **kwargs):
         request_data = request.data
         if kwargs.get("id"):
